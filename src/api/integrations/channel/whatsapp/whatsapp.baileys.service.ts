@@ -1935,12 +1935,18 @@ export class BaileysStartupService extends ChannelStartupService {
     }
 
     if (message['conversation']) {
-      return await this.client.sendMessage(
-        sender,
-        { text: message['conversation'], mentions, linkPreview: linkPreview } as unknown as AnyMessageContent,
-        option as unknown as MiscMessageGenerationOptions,
-      );
-    }
+  return await this.client.sendMessage(
+    sender,
+    {
+      text: message['conversation'],
+      mentions,
+    } as unknown as AnyMessageContent,
+    {
+      ...option,
+      linkPreview: true,
+    } as unknown as MiscMessageGenerationOptions,
+  );
+}
 
     if (!message['audio'] && !message['poll'] && !message['sticker'] && sender != 'status@broadcast') {
       return await this.client.sendMessage(
@@ -2069,7 +2075,7 @@ export class BaileysStartupService extends ChannelStartupService {
         }
       }
 
-      const linkPreview = options?.linkPreview != false ? undefined : false;
+      const linkPreview = options?.linkPreview === false ? false : true;
 
       let quoted: WAMessage;
 
